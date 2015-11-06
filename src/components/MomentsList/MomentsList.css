@@ -26,7 +26,7 @@
     width: 50px;
     height: 50px;
     display: block;
-    cursor: pointer;
+    /*cursor: pointer;*/
     border-radius: 50%;
 }
 
@@ -36,9 +36,12 @@
     font-size: 1.2em;
 }
 
-.MomentItem-likes:hover {
+.MomentItem-likes:hover,
+.MomentItem-likes:active,
+.MomentItem-likes:focus {
     text-decoration: none;
 }
+
 
 .MomentItem-likes:hover .glyphicon {
     color: #818892;
@@ -50,7 +53,21 @@
     vertical-align: middle;
 }
 
+.MomentItem-likes.liked .glyphicon {
+    color: #f15e58;
+}
+
 .MomentItem-likes-count {
     margin-left: 5px;
     vertical-align: middle;
+    color: #b5bdc7;
+    text-decoration: none;
+}
+
+.MomentItem-likes:hover .MomentItem-likes-count {
+    color: #818892;
+}
+
+.MomentItem-likes.liked .MomentItem-likes-count {
+    color: #f15e58;
 }

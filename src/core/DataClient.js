@@ -39,6 +39,20 @@ const DataClient = {
                 reject(err);
             }
         })
+    }),
+
+    like: (storyId, momentId, setLike) => new Promise((resolve, reject) => {
+        var url = setLike ? apiUrls.Like : apiUrls.UnLike;
+        url = url.replace('{storyId}', storyId);
+        url = url.replace('{momentId}', momentId);
+        if (setLike) {
+            console.log('DataClient like');
+            api.post(url).then(resolve, reject);
+        }
+        else {
+            console.log('DataClient unlike');
+            api.del(url).then(resolve, reject);
+        }
     })
 };
 

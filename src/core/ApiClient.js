@@ -52,6 +52,24 @@ const ApiClient = {
             });
     }),
 
+    del: (path) => new Promise((resolve, reject) => {
+        request
+            .del(getUrl(path))
+            .accept('application/json')
+            .withCredentials()
+            .end((err, res) => {
+                if (err) {
+                    if (err.status === 404) {
+                        resolve(null);
+                    } else {
+                        reject(err);
+                    }
+                } else {
+                    resolve(res);
+                }
+            });
+    }),
+
     auth: (path, params) => new Promise((resolve, reject) => {
         request
             .post(getUrl(path))
