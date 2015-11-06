@@ -1,0 +1,6 @@
+{
+  "name": "MomentsList",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./MomentsList.js"
+}

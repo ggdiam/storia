@@ -1,0 +1,8 @@
+.MainPage {
+    background-color: #f2f2f2;
+    /*font-size: 30px;*/
+}
+
+.MainPage .container {
+    max-width: 720px;
+}

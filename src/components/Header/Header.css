@@ -1,0 +1,67 @@
+/* React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
+
+@import '../variables.css';
+
+:root {
+  --brand-color: #61dafb;
+}
+
+.Header {
+  /*background: #373277;*/
+  background: #555555;
+  color: #fff;
+}
+
+.Header-container {
+  margin: 0 auto;
+  padding: 20px 0;
+  max-width: var(--max-content-width);
+}
+
+.Header-brand {
+  color: color(var(--brand-color) lightness(+10%));
+  text-decoration: none;
+  font-size: 1.75em; /* ~28px */
+
+  float: left;
+
+  background-image: url(//fr0.storia.me/c2739309e03a7e4b877f85b7b84f37f5/modules/common/img/sprite.png?2015-10-19-12-38);
+  background-position: -760px -469px;
+  background-repeat: no-repeat;
+  width: 128px;
+  height: 42px;
+  display: inline-block;
+}
+
+.Header-brand:hover {
+  color: color(var(--brand-color) lightness(+20%));
+  text-decoration: none;
+}
+
+.Header-brandTxt {
+  margin-left: 10px;
+}
+
+.Header-nav {
+  float: right;
+  margin-top: 6px;
+}
+
+.Header-banner {
+  text-align: center;
+}
+
+.Header-bannerTitle {
+  margin: 0;
+  padding: 10px;
+  font-weight: normal;
+  font-size: 4em;
+  line-height: 1em;
+}
+
+.Header-bannerDesc {
+  padding: 0;
+  color: rgba(255, 255, 255, .5);
+  font-size: 1.25em;
+  margin: 0;
+}
