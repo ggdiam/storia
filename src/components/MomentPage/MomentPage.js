@@ -8,16 +8,16 @@ import cachedDataClient from '../../core/CachedDataClient';
 import apiUrls from '../../constants/ApiUrls';
 
 import MomentItem from '../MomentItem';
+import MomentViewType from '../../constants/MomentViewType';
 
 @withStyles(styles)
 class MomentPage extends Component {
 
     componentDidMount() {
-        console.log('navigator.onLine', navigator.onLine);
-        this.getFeedContent();
+        this.getMomentContent();
     }
 
-    getFeedContent() {
+    getMomentContent() {
         var routeParams = this.props ? this.props.routeParams : null;
         if (routeParams) {
             var storyId = routeParams.storyId;
@@ -25,15 +25,9 @@ class MomentPage extends Component {
             var url = apiUrls.MomentContent;
             url = url.replace('{storyId}', storyId);
             url = url.replace('{momentId}', momentId);
+
             cachedDataClient.get(url).then((data) => {
                 console.log(data);
-
-                //ToDo: debug
-                //data.items[1].objectPreview.attachments = [
-                //    {file: {title: 'my_fav_img.png'}},
-                //    {file: {title: 'my_fav_img_two.png'}},
-                //    {file: {title: 'my_fav_img_3.png'}}
-                //];
 
                 this.setState({
                     data: data
@@ -50,7 +44,7 @@ class MomentPage extends Component {
         return (
             <div className="MomentPage">
                 <div className="container">
-                    <MomentItem data={data} ix={0} />
+                    <MomentItem viewType={MomentViewType.details} data={data} />
                 </div>
             </div>
         );

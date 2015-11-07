@@ -13,20 +13,20 @@ class LikeCtrl extends Component {
     likeUnlikeMoment(e, item) {
         e.preventDefault();
 
-        if (item && item.objectPreview) {
-            var storyId = item.objectPreview.storyId;
-            var momentId = item.objectPreview.id;
+        if (item && item) {
+            var storyId = item.storyId;
+            var momentId = item.id;
 
             var isLiked = this.isLiked(item);
             if (isLiked) {
                 console.log('unlike');
-                item.objectPreview.context.liked = false;
-                item.objectPreview.stats.likes -= 1;
+                item.context.liked = false;
+                item.stats.likes -= 1;
             }
             else {
                 console.log('like');
-                item.objectPreview.context.liked = true;
-                item.objectPreview.stats.likes += 1;
+                item.context.liked = true;
+                item.stats.likes += 1;
             }
 
             //запрос в апи
@@ -38,16 +38,16 @@ class LikeCtrl extends Component {
     }
 
     getLikesCount(item) {
-        if (item.objectPreview && item.objectPreview.stats) {
-            return item.objectPreview.stats.likes;
+        if (item && item.stats) {
+            return item.stats.likes;
         }
 
         return 0;
     }
 
     isLiked(item) {
-        if (item.objectPreview && item.objectPreview.context) {
-            return item.objectPreview.context.liked;
+        if (item && item.context) {
+            return item.context.liked;
         }
 
         return false;
@@ -61,9 +61,9 @@ class LikeCtrl extends Component {
 
             return (
                 <a href="#" onClick={(e)=>this.likeUnlikeMoment(e,item)}
-                   className={`MomentItem-likes ${isLiked ? 'liked' : ''}`}>
+                   className={`LikeCtrl-likes ${isLiked ? 'liked' : ''}`}>
                     <span className="glyphicon glyphicon-heart"></span>
-                    <span className="MomentItem-likes-count">{this.getLikesCount(item)}</span>
+                    <span className="LikeCtrl-likes-count">{this.getLikesCount(item)}</span>
                 </a>
             )
         }

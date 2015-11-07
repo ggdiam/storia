@@ -7,6 +7,8 @@ import Location from '../../core/Location';
 import dataClient from '../../core/DataClient';
 import apiUrls from '../../constants/ApiUrls';
 
+import MomentViewType from '../../constants/MomentViewType';
+
 import LikeCtrl from '../LikeCtrl';
 
 @withStyles(styles)
@@ -15,14 +17,14 @@ class MomentItem extends Component {
     gotoMoment(e, item) {
         e.preventDefault();
 
-        var storyId = item.objectPreview.storyId;
-        var momentId = item.objectPreview.id;
+        var storyId = item.storyId;
+        var momentId = item.id;
         Location.pushState(null, `/story/${storyId}/moment/${momentId}`);
     }
 
     getAuthor(item) {
-        if (item.objectPreview && item.objectPreview.owner) {
-            return item.objectPreview.owner.name;
+        if (item && item.owner) {
+            return item.owner.name;
         }
         else {
             return 'нет автора';
@@ -30,8 +32,8 @@ class MomentItem extends Component {
     }
 
     getStoryTitle(item) {
-        if (item.objectPreview) {
-            return item.objectPreview.storyTitle;
+        if (item) {
+            return item.storyTitle;
         }
         else {
             return 'нет названия';
@@ -39,8 +41,8 @@ class MomentItem extends Component {
     }
 
     getMomentTitle(item) {
-        if (item.objectPreview && item.objectPreview.title && item.objectPreview.title.length > 0) {
-            return item.objectPreview.title;
+        if (item && item.title && item.title.length > 0) {
+            return item.title;
         }
         else {
             return 'нет названия';
@@ -60,11 +62,11 @@ class MomentItem extends Component {
         }
 
         //console.log('item', ix, 'img count:', item.objectPreview.attachments.length);
-        if (item.objectPreview && item.objectPreview.attachments && item.objectPreview.attachments.length > 0) {
+        if (item && item.attachments && item.attachments.length > 0) {
             //console.log('item', ix,'images:');
 
             //наши картинки
-            var images = item.objectPreview.attachments;
+            var images = item.attachments;
 
             //images.forEach((img)=>{
             //    console.log('img:', 'title:', img.file.title, 'path:', img.file.path);
@@ -97,19 +99,48 @@ class MomentItem extends Component {
     }
 
     getAvatar(item) {
-        if (item.objectPreview && item.objectPreview.owner && item.objectPreview.owner.avatar) {
-            return `${item.objectPreview.owner.avatar.path}/tn/50x50`;
+        if (item && item.owner && item.owner.avatar) {
+            return `${item.owner.avatar.path}/tn/50x50`;
         }
 
         return null;
     }
 
+    renderContent(item, ix) {
+        var viewType = this.props && this.props.viewType ? this.props.viewType : MomentViewType.item;
+        var img = this.getImageSrc(item, ix);
+
+        if (viewType == MomentViewType.item) {
+            return (
+                <div className="MomentItem-link" onClick={(e)=>this.gotoMoment(e, item)}>
+                    <h3>{this.getMomentTitle(item)}</h3>
+
+                    {
+                        img ? [<img key={`moment-img-${ix}`} className="MomentItem-img img-responsive" alt={img.title}
+                                    src={img.src}/>] : null
+                    }
+                </div>
+            )
+        }
+        else {
+            return (
+                <div className="MomentItem-nolink">
+                    <h3>{this.getMomentTitle(item)}</h3>
+
+                    {
+                        img ? [<img key={`moment-img-${ix}`} className="MomentItem-img img-responsive" alt={img.title}
+                                    src={img.src}/>] : null
+                    }
+                </div>
+            )
+        }
+    }
+
     render() {
-        var item = this.props.data;
-        var ix = this.props.ix;
+        var item = this.props ? this.props.data : null;
+        var ix = this.props ? this.props.ix : 0;
 
         if (item) {
-            var img = this.getImageSrc(item, ix);
             var avatar = this.getAvatar(item);
 
             return (
@@ -132,14 +163,7 @@ class MomentItem extends Component {
                         </div>
                     </div>
 
-                    <div className="MomentItem-link" onClick={(e)=>this.gotoMoment(e, item)}>
-                        <h3>{this.getMomentTitle(item)}</h3>
-
-                        {
-                            img ? [<img key={ix} className="MomentItem-img img-responsive" alt={img.title}
-                                        src={img.src}/>] : null
-                        }
-                    </div>
+                    {this.renderContent(item, ix)}
 
                     <LikeCtrl data={item} />
                 </div>

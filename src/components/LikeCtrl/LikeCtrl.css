@@ -1,0 +1,41 @@
+.LikeCtrl-likes {
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 1.2em;
+}
+
+.LikeCtrl-likes:hover,
+.LikeCtrl-likes:active,
+.LikeCtrl-likes:focus {
+    text-decoration: none;
+}
+
+
+.LikeCtrl-likes:hover .glyphicon {
+    color: #818892;
+}
+
+.LikeCtrl-likes .glyphicon {
+    font-size: 1.4em;
+    color: #b5bdc7;
+    vertical-align: middle;
+}
+
+.LikeCtrl-likes.liked .glyphicon {
+    color: #f15e58;
+}
+
+.LikeCtrl-likes-count {
+    margin-left: 5px;
+    vertical-align: middle;
+    color: #b5bdc7;
+    text-decoration: none;
+}
+
+.LikeCtrl-likes:hover .LikeCtrl-likes-count {
+    color: #818892;
+}
+
+.LikeCtrl-likes.liked .LikeCtrl-likes-count {
+    color: #f15e58;
+}
