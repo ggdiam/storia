@@ -49,6 +49,7 @@ class MomentItem extends Component {
         }
     }
 
+    //получает картинку момента согласно логике
     getImageSrc(item, ix) {
         function returnResult(img) {
             if (img.file.path) {
@@ -106,10 +107,12 @@ class MomentItem extends Component {
         return null;
     }
 
+    //Рендерит тело момента; 2 вида, кликабельное тело и нет
     renderContent(item, ix) {
         var viewType = this.props && this.props.viewType ? this.props.viewType : MomentViewType.item;
         var img = this.getImageSrc(item, ix);
 
+        //тело кликабельное
         if (viewType == MomentViewType.item) {
             return (
                 <div className="MomentItem-link" onClick={(e)=>this.gotoMoment(e, item)}>
@@ -123,6 +126,7 @@ class MomentItem extends Component {
             )
         }
         else {
+            //тело - не кликабельное
             return (
                 <div className="MomentItem-nolink">
                     <h3>{this.getMomentTitle(item)}</h3>

@@ -10,6 +10,7 @@ import apiUrls from '../../constants/ApiUrls';
 @withStyles(styles)
 class LikeCtrl extends Component {
 
+    //проставляет / убирает лайк
     likeUnlikeMoment(e, item) {
         e.preventDefault();
 
@@ -19,12 +20,12 @@ class LikeCtrl extends Component {
 
             var isLiked = this.isLiked(item);
             if (isLiked) {
-                console.log('unlike');
+                //console.log('unlike');
                 item.context.liked = false;
                 item.stats.likes -= 1;
             }
             else {
-                console.log('like');
+                //console.log('like');
                 item.context.liked = true;
                 item.stats.likes += 1;
             }

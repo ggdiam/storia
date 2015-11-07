@@ -17,7 +17,9 @@ class MomentPage extends Component {
         this.getMomentContent();
     }
 
+    //получает данные момента
     getMomentContent() {
+        //параметры из урла
         var routeParams = this.props ? this.props.routeParams : null;
         if (routeParams) {
             var storyId = routeParams.storyId;
@@ -26,6 +28,7 @@ class MomentPage extends Component {
             url = url.replace('{storyId}', storyId);
             url = url.replace('{momentId}', momentId);
 
+            //запрос в кэш или апи
             cachedDataClient.get(url).then((data) => {
                 console.log(data);
 

@@ -2,15 +2,18 @@ import api from './ApiClient';
 import apiUrls from '../constants/ApiUrls';
 import config from '../config';
 import dataClient from './DataClient';
-import ExecutionEnvironment from 'fbjs/lib/ExecutionEnvironment';
+import { canUseDOM } from 'fbjs/lib/ExecutionEnvironment';
 import SessionStorageHelper from './SessionStorageHelper.js';
 
+//Клиент для запроса данных из API с кэшированием в SessionStorage
 const CachedDataClient = {
     get: (path, params) => new Promise((resolve, reject) => {
         console.log('CachedDataClient get');
 
-        if (ExecutionEnvironment.canUseDOM) {
+        //окружение браузера
+        if (canUseDOM) {
             var key = getKey(path, params);
+            //получаем значение из кэша
             var res = SessionStorageHelper.getItem(key);
             //если офлайн режим и есть в кэше - отдаем
             if (!window.navigator.onLine && res) {
@@ -18,8 +21,10 @@ const CachedDataClient = {
                 resolve(JSON.parse(res));
             }
             else {
+                //если нет - то отдаем из API
                 dataClient.get(path, params).then((data) => {
                     console.log('CachedDataClient result from api');
+                    //результат сохраняем в кэш
                     SessionStorageHelper.setItem(key, JSON.stringify(data));
                     resolve(data);
                 }, reject);
@@ -34,6 +39,7 @@ const CachedDataClient = {
     })
 };
 
+//получает ключ из пути и параметорв
 function getKey(path, params) {
     let prms = [];
     if (params) {

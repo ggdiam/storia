@@ -60,6 +60,7 @@ class MainPage extends React.Component {
         })
     }
 
+    //Фильтрует список моментов согласно фильтру
     filterData(data, filterType) {
         //deep copy
         var filteredData = JSON.parse(JSON.stringify(data));
@@ -84,6 +85,7 @@ class MainPage extends React.Component {
         return filteredData;
     }
 
+    //Получает данные
     getFeedContent() {
         //получаем ленту
         cachedDataClient.get(apiUrls.FeedContent).then((data) => {
