@@ -6,3 +6,7 @@
 .MainPage .container {
     max-width: 720px;
 }
+
+.MainPage-toolbar {
+    margin-top: 20px;
+}
