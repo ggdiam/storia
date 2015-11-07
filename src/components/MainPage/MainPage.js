@@ -4,6 +4,7 @@ import withStyles from '../../decorators/withStyles';
 import Link from '../Link';
 
 import dataClient from '../../core/DataClient';
+import cachedDataClient from '../../core/CachedDataClient';
 import apiUrls from '../../constants/ApiUrls';
 
 import MomentsList from '../MomentsList';
@@ -12,11 +13,12 @@ import MomentsList from '../MomentsList';
 class MainPage extends Component {
 
     componentDidMount() {
+        console.log('navigator.onLine', navigator.onLine);
         this.getFeedContent();
     }
 
     getFeedContent() {
-        dataClient.get(apiUrls.FeedContent).then((data) => {
+        cachedDataClient.get(apiUrls.FeedContent).then((data) => {
             console.log(data);
 
             //ToDo: debug
