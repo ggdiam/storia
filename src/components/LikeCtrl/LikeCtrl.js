@@ -31,7 +31,21 @@ class LikeCtrl extends Component {
             }
 
             //запрос в апи
-            dataClient.like(storyId, momentId, !isLiked);
+            dataClient.like(storyId, momentId, !isLiked).then((data)=>{
+                if (isLiked) {
+                    console.log('set unlike success');
+                }
+                else {
+                    console.log('set like success');
+                }
+            }).catch((err) => {
+                if (isLiked) {
+                    console.log('set unlike fails');
+                }
+                else {
+                    console.log('set like fails');
+                }
+            });
 
             //принудительно обновляем, т.к. меняли вне стейта
             this.forceUpdate();

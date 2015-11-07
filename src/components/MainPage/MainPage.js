@@ -14,23 +14,49 @@ import MomentsList from '../MomentsList';
 import FilterType from '../../constants/FilterType';
 
 @withStyles(styles)
-class MainPage extends React.Component {
+class MainPage extends Component {
 
     constructor(props) {
         super(props);
 
+        var filteredData = null;
+        var data = props && props.data ? props.data : null;
+        var filterType = this.loadFilterState();
+
+        if (data) {
+            //фильтруем данные
+            filteredData = this.filterData(data, filterType);
+        }
+
+        if (canUseDOM) {
+            console.log('MainPage ctor', data, filteredData, filterType);
+        }
+
         //начальное состояние
         this.state = {
-            data: null,
-            filteredData: null,
-            filterType: this.loadFilterState()
+            data: data,
+            filteredData: filteredData,
+            filterType: filterType
         }
     }
 
     componentDidMount() {
-        console.log('navigator.onLine', navigator.onLine);
-        //получаем данные
-        this.getFeedContent();
+        //console.log('navigator.onLine', navigator.onLine);
+        //
+        var data = this.state.data;
+
+        if (data) {
+        //    //фильтруем данные
+        //    var filteredData = this.filterData(data, this.state.filterType);
+        //    //записываем в стейт
+        //    this.setState({
+        //        filteredData: filteredData
+        //    })
+        }
+        else {
+            //получаем данные
+            this.getFeedContent();
+        }
     }
 
     loadFilterState() {

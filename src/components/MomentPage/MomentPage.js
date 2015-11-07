@@ -3,6 +3,8 @@ import styles from './MomentPage.css';
 import withStyles from '../../decorators/withStyles';
 import Link from '../Link';
 
+import { canUseDOM } from 'fbjs/lib/ExecutionEnvironment';
+
 import dataClient from '../../core/DataClient';
 import cachedDataClient from '../../core/CachedDataClient';
 import apiUrls from '../../constants/ApiUrls';
@@ -13,8 +15,28 @@ import MomentViewType from '../../constants/MomentViewType';
 @withStyles(styles)
 class MomentPage extends Component {
 
+    constructor(props) {
+        super(props);
+
+        var data = props && props.data ? props.data : null;
+
+        if (canUseDOM) {
+            console.log('MomentPage ctor', data);
+        }
+
+        //начальное состояние
+        this.state = {
+            data: data
+        }
+    }
+
     componentDidMount() {
-        this.getMomentContent();
+        var data = this.state.data;
+
+        if (!data) {
+            //получаем данные
+            this.getMomentContent();
+        }
     }
 
     //получает данные момента

@@ -1,4 +1,7 @@
 import request from 'superagent';
+import { canUseDOM } from 'fbjs/lib/ExecutionEnvironment';
+
+import authHolder from './AuthHolder';
 
 //API сервер
 const apiPath = 'https://storia.me/api';
@@ -17,22 +20,45 @@ const getUrl = (path) => {
 const ApiClient = {
 
     get: (path, params) => new Promise((resolve, reject) => {
-        request
-            .get(getUrl(path))
-            .query(params)
-            .accept('application/json')
-            .withCredentials()
-            .end((err, res) => {
-                if (err) {
-                    if (err.status === 404) {
-                        resolve(null);
+        //запросы с клиента
+        if (canUseDOM) {
+            request
+                .get(getUrl(path))
+                .withCredentials() //используем куки, полученные при авторизации
+                .query(params)
+                .accept('application/json')
+                .end((err, res) => {
+                    if (err) {
+                        if (err.status === 404) {
+                            resolve(null);
+                        } else {
+                            reject(err);
+                        }
                     } else {
-                        reject(err);
+                        resolve(res.body);
                     }
-                } else {
-                    resolve(res.body);
-                }
-            });
+                });
+        }
+        else {
+            console.log('api get, authHolder', authHolder);
+            //серверные запросы
+            request
+                .get(getUrl(path))
+                .set('Cookie', `SSID=${authHolder.sessionId}`)//проставляем куки SSID, полученные при авторизации явным образом
+                .query(params)
+                .accept('application/json')
+                .end((err, res) => {
+                    if (err) {
+                        if (err.status === 404) {
+                            resolve(null);
+                        } else {
+                            reject(err);
+                        }
+                    } else {
+                        resolve(res.body);
+                    }
+                });
+        }
     }),
 
     post: (path, params) => new Promise((resolve, reject) => {
@@ -67,7 +93,7 @@ const ApiClient = {
                         reject(err);
                     }
                 } else {
-                    resolve(res);
+                    resolve(res.text);
                 }
             });
     }),
@@ -77,7 +103,6 @@ const ApiClient = {
             .post(getUrl(path))
             .send(params)
             .accept('application/json')
-            .withCredentials()
             .end((err, res) => {
                 if (err) {
                     if (err.status === 404) {
@@ -87,7 +112,11 @@ const ApiClient = {
                     }
                 } else {
                     if (res && res.text) {
-                        resolve(JSON.parse(res.text));
+                        var data = JSON.parse(res.text);
+                        authHolder.sessionId = data.sessionId;
+                        authHolder.userId = data.userId;
+                        authHolder.accountId = data.accountId;
+                        resolve(data);
                     }
                     else {
                         reject(err);

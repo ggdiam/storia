@@ -9,14 +9,22 @@ class Html extends Component {
         description: PropTypes.string,
         css: PropTypes.string,
         body: PropTypes.string.isRequired,
+        initialState: PropTypes.string.isRequired,
     };
 
     static defaultProps = {
         title: '',
         description: '',
+        initialState: ''
     };
 
     render() {
+
+        var state = this.props.initialState;
+        state = encodeURIComponent(state);
+        state = state.replace(/\'/g, '\\\''); //экранируем ' в строке
+        var scriptInitState = `window.__INITIAL_STATE__ = '${state}';`;
+
         return (
             <html className="no-js" lang="">
             <head>
@@ -30,6 +38,7 @@ class Html extends Component {
                 <style id="css" dangerouslySetInnerHTML={{__html: this.props.css}}/>
             </head>
             <body>
+            <script dangerouslySetInnerHTML={{__html: scriptInitState}} />
             <div id="app" dangerouslySetInnerHTML={{__html: this.props.body}}/>
             <script src="/app.js"></script>
             </body>
