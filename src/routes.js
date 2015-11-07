@@ -12,6 +12,7 @@ import NotFoundPage from './components/NotFoundPage';
 import ErrorPage from './components/ErrorPage';
 
 import MainPage from './components/MainPage';
+import MomentPage from './components/MomentPage';
 
 const router = new Router(on => {
     on('*', async (state, next) => {
@@ -24,6 +25,13 @@ const router = new Router(on => {
         //let data = await Storage.getPageData(state.context, [`${apiUrls.SectionGet}${sectionId}`]);
         var data = null;
         return <MainPage data={data}/>
+    });
+
+    //story/081e2b2aff070000/moment/092c2fb8d0070000
+    on('/story/:storyId/moment/:momentId', async (state) => {
+        //let data = await Storage.getPageData(state.context, [`${apiUrls.SectionGet}${sectionId}`]);
+        var data = null;
+        return <MomentPage routeParams={state.params} data={data}/>
     });
 
     on('/contact', async () => <ContactPage />);

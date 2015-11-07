@@ -1,0 +1,6 @@
+{
+  "name": "MomentPage",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./MomentPage.js"
+}

@@ -1,0 +1,6 @@
+{
+  "name": "MomentItem",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./MomentItem.js"
+}
