@@ -2,6 +2,8 @@ import api from './ApiClient';
 import apiUrls from '../constants/ApiUrls';
 import config from '../config';
 
+import IsOnlineService from './IsOnlineService';
+
 //Клиент работы с данными
 
 //Тут зашита логика авторизации при вызове любого get, post, del метода API
@@ -79,6 +81,10 @@ function makeRequest(verb, path, params) {
             }
             else {
                 console.log('DataClient data err');
+
+                //предполагаем - проблемы с сетью - запускаем проверку соединения
+                IsOnlineService.check();
+
                 //ошибка запроса данных - возвращаем ошибку
                 reject(err);
             }

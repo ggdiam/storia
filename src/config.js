@@ -2,6 +2,8 @@
 
 export default {
     googleAnalyticsId: 'UA-XXXXX-X',
+    pingPath: '/api/online',
+    apiPath: 'https://storia.me/api',
     auth: {
         params: {
             "password": "qwe123",

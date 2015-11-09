@@ -4,7 +4,8 @@ import withStyles from '../../decorators/withStyles';
 import Link from '../Link';
 import Location from '../../core/Location';
 
-import dataClient from '../../core/DataClient';
+//import dataClient from '../../core/DataClient';
+import delayedLikeClient from '../../core/DelayedLikeClient';
 import apiUrls from '../../constants/ApiUrls';
 
 @withStyles(styles)
@@ -31,7 +32,7 @@ class LikeCtrl extends Component {
             }
 
             //запрос в апи
-            dataClient.like(storyId, momentId, !isLiked).then((data)=>{
+            delayedLikeClient.like(storyId, momentId, !isLiked).then((data)=>{
                 if (isLiked) {
                     console.log('set unlike success');
                 }

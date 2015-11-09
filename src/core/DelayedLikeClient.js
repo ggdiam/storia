@@ -3,7 +3,7 @@ import SessionStorageHelper from './SessionStorageHelper.js';
 import dataClient from './DataClient';
 
 const DelayedLikeClient = {
-    like: (storyId, momentId, setLike) => Promise((resolve, reject) => {
+    like: (storyId, momentId, setLike) => new Promise((resolve, reject) => {
         dataClient.like(storyId, momentId, setLike)
             .then(resolve) //если запрос отработал успешно
             .catch((err) => {
@@ -20,7 +20,7 @@ const DelayedLikeClient = {
                 reject(err);
         })
     }),
-    checkDelayedAndSet: () => Promise((resolve, reject) => {
+    checkDelayedAndSet: () => new Promise((resolve, reject) => {
         var i = sessionStorage.length;
         //пробегаемся по всем ключам отложенных лайков
         while(i--) {

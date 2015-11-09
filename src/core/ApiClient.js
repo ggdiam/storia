@@ -1,10 +1,11 @@
 import request from 'superagent';
 import { canUseDOM } from 'fbjs/lib/ExecutionEnvironment';
+import config from '../config';
 
 import authHolder from './AuthHolder';
 
 //API сервер
-const apiPath = 'https://storia.me/api';
+const apiPath = config.apiPath;
 
 //преобразует относительные урлы в абсолютные
 const getUrl = (path) => {

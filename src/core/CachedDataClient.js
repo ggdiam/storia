@@ -4,6 +4,7 @@ import config from '../config';
 import dataClient from './DataClient';
 import { canUseDOM } from 'fbjs/lib/ExecutionEnvironment';
 import SessionStorageHelper from './SessionStorageHelper.js';
+import IsOnlineService from './IsOnlineService';
 
 //Клиент для запроса данных из API с кэшированием в SessionStorage
 const CachedDataClient = {
@@ -12,11 +13,14 @@ const CachedDataClient = {
 
         //окружение браузера
         if (canUseDOM) {
+            //var isOnline = window.navigator.onLine;
+            var isOnline = IsOnlineService.isOnline();
+
             var key = getKey(path, params);
             //получаем значение из кэша
             var res = SessionStorageHelper.getItem(key);
             //если офлайн режим и есть в кэше - отдаем
-            if (!window.navigator.onLine && res) {
+            if (!isOnline && res) {
                 console.log('CachedDataClient result from cache');
                 resolve(JSON.parse(res));
             }
@@ -34,9 +38,6 @@ const CachedDataClient = {
             dataClient.get(path, params).then(resolve, reject);
         }
     }),
-
-    like: (storyId, momentId, setLike) => new Promise((resolve, reject) => {
-    })
 };
 
 //получает ключ из пути и параметорв
