@@ -7,14 +7,17 @@ import delayedLikeClient from './DelayedLikeClient';
 //const pingUrl = canUseDOM ? `${location.protocol}//${location.host}${config.pingPath}` : 'https://storia.me';
 const pingUrl = 'https://storia.me';
 
+//сервис - проверяет доступность сети
 var IsOnlineService = (function () {
     var isOnline = true;
 
+    //запускает проверку
     function check() {
         console.log('IsOnline check');
         setTimeout(checkResult, 3000);
     }
 
+    //обработка результата пинга
     function checkResult() {
         //пингуем
         ping().then((res) => {
@@ -35,6 +38,7 @@ var IsOnlineService = (function () {
         isOnline = false;
     }
 
+    //пингует заданный урл
     function ping() {
         return new Promise((resolve, reject) => {
             var random = Math.random();

@@ -1,5 +1,6 @@
 import { canUseDOM } from 'fbjs/lib/ExecutionEnvironment';
 
+//хелпер для работы с SessionStorage
 var SessionStorageHelper = (function () {
     function setItem(key, value) {
         try {
@@ -23,6 +24,7 @@ var SessionStorageHelper = (function () {
         return sessionStorage.getItem(key);
     }
 
+    //удаляет все записи
     function clearAll() {
         console.log('sessionStorage clearAll');
         var i = sessionStorage.length;

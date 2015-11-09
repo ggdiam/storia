@@ -7,6 +7,8 @@ import Router from './routes';
 import Location from './core/Location';
 import { addEventListener, removeEventListener } from './utils/DOMUtils';
 
+import delayedLikeClient from './core/DelayedLikeClient';
+
 let cssContainer = document.getElementById('css');
 const appContainer = document.getElementById('app');
 const context = {
@@ -87,6 +89,9 @@ function run() {
         removeEventListener(window, 'scroll', setPageOffset);
         unlisten();
     });
+
+    //запускаем проверку отложенных лайков
+    delayedLikeClient.checkDelayedAndSet();
 }
 
 // Run the application when both DOM is ready

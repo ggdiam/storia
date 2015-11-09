@@ -2,13 +2,16 @@ import { canUseDOM } from 'fbjs/lib/ExecutionEnvironment';
 import api from './ApiClient';
 import dataClient from './DataClient';
 
+//клиент для запроса данных страниц
 var PageDataClient = (function () {
 
     function getPageData(context, url) {
         return new Promise((resolve, reject)=> {
+
+            //если на клиенте, и есть данные для страницы в __INITIAL_STATE__ - возвращаем
             if (canUseDOM && window.__INITIAL_STATE__) {
                 console.log('getPageData from initial state');
-                //если на клиенте, и есть данные для страницы - сразу возвращаем
+
                 var data = null;
                 try {
                     var state = window.__INITIAL_STATE__;
@@ -43,26 +46,6 @@ var PageDataClient = (function () {
                     //возвращаем
                     resolve(data);
                 }).catch(reject);
-
-                ////на стороне сервера - всегда отдаем контент из API
-                //if (!canUseDOM) {
-                //    //делаем запрос в api
-                //    dataClient.get(url).then((data)=> {
-                //        if (!canUseDOM && context && context.onSetInitialState) {
-                //            context.onSetInitialState(JSON.stringify({
-                //                url: url,
-                //                data: data
-                //            }));
-                //        }
-                //        //возвращаем
-                //        resolve(data);
-                //    }).catch(reject);
-                //}
-                //else {
-                //    //на клиенте, если нет window.__INITIAL_STATE__ - то отдаем null
-                //    //чтобы данные запрашивались в компоненте
-                //    resolve(null);
-                //}
             }
         });
     }

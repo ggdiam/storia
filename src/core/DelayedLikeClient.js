@@ -2,7 +2,10 @@
 import SessionStorageHelper from './SessionStorageHelper.js';
 import dataClient from './DataClient';
 
+//клиент для проставления / удаления отложенного лайка
 const DelayedLikeClient = {
+
+    //пытается проставить лайк / unlike, и если ошибка - то сохраняем признак в SessionStorage
     like: (storyId, momentId, setLike) => new Promise((resolve, reject) => {
         dataClient.like(storyId, momentId, setLike)
             .then(resolve) //если запрос отработал успешно
@@ -14,6 +17,8 @@ const DelayedLikeClient = {
                     momentId: momentId,
                     setLike: setLike
                 };
+
+                //сохраняем признак отложенного лайка
                 SessionStorageHelper.setItem(key, JSON.stringify(obj));
 
                 //отдаем ошибку

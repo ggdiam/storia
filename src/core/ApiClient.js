@@ -91,6 +91,7 @@ const ApiClient = {
             });
     }),
 
+    //запрос авторизации
     auth: (path, params) => new Promise((resolve, reject) => {
         function authResult(err, res) {
             if (err) {
@@ -102,6 +103,8 @@ const ApiClient = {
             } else {
                 if (res && res.text) {
                     var data = JSON.parse(res.text);
+
+                    //прошел успешно - сохраняем данные авторизации
                     authHolder.sessionId = data.sessionId;
                     authHolder.userId = data.userId;
                     authHolder.accountId = data.accountId;

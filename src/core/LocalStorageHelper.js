@@ -1,5 +1,6 @@
 import { canUseDOM } from 'fbjs/lib/ExecutionEnvironment';
 
+//хелпер для работы с LocalStorage
 var LocalStorageHelper = (function () {
     function setItem(key, value) {
         try {
