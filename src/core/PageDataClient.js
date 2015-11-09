@@ -16,8 +16,12 @@ var PageDataClient = (function () {
                     state = decodeURIComponent(state);
                     var stateData = JSON.parse(state);
 
+                    //проверяем что наш урл
                     if (url == stateData.url) {
                         data = stateData.data;
+
+                        //обнуляем, чтобы дальнейшие запросы были в API
+                        window.__INITIAL_STATE__ = null;
                     }
                     //console.log('getPageData data:', data);
                 }

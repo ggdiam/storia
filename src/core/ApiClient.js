@@ -20,6 +20,18 @@ const getUrl = (path) => {
 const ApiClient = {
 
     get: (path, params) => new Promise((resolve, reject) => {
+        function getResult(err, res) {
+            if (err) {
+                if (err.status === 404) {
+                    resolve(null);
+                } else {
+                    reject(err);
+                }
+            } else {
+                resolve(res.body);
+            }
+        }
+
         //запросы с клиента
         if (canUseDOM) {
             request
@@ -27,17 +39,7 @@ const ApiClient = {
                 .withCredentials() //используем куки, полученные при авторизации
                 .query(params)
                 .accept('application/json')
-                .end((err, res) => {
-                    if (err) {
-                        if (err.status === 404) {
-                            resolve(null);
-                        } else {
-                            reject(err);
-                        }
-                    } else {
-                        resolve(res.body);
-                    }
-                });
+                .end(getResult);
         }
         else {
             console.log('api get, authHolder', authHolder);
@@ -47,17 +49,7 @@ const ApiClient = {
                 .set('Cookie', `SSID=${authHolder.sessionId}`)//проставляем куки SSID, полученные при авторизации явным образом
                 .query(params)
                 .accept('application/json')
-                .end((err, res) => {
-                    if (err) {
-                        if (err.status === 404) {
-                            resolve(null);
-                        } else {
-                            reject(err);
-                        }
-                    } else {
-                        resolve(res.body);
-                    }
-                });
+                .end(getResult);
         }
     }),
 
@@ -99,30 +91,43 @@ const ApiClient = {
     }),
 
     auth: (path, params) => new Promise((resolve, reject) => {
-        request
-            .post(getUrl(path))
-            .send(params)
-            .accept('application/json')
-            .end((err, res) => {
-                if (err) {
-                    if (err.status === 404) {
-                        resolve(null);
-                    } else {
-                        reject(err);
-                    }
+        function authResult(err, res) {
+            if (err) {
+                if (err.status === 404) {
+                    resolve(null);
                 } else {
-                    if (res && res.text) {
-                        var data = JSON.parse(res.text);
-                        authHolder.sessionId = data.sessionId;
-                        authHolder.userId = data.userId;
-                        authHolder.accountId = data.accountId;
-                        resolve(data);
-                    }
-                    else {
-                        reject(err);
-                    }
+                    reject(err);
                 }
-            });
+            } else {
+                if (res && res.text) {
+                    var data = JSON.parse(res.text);
+                    authHolder.sessionId = data.sessionId;
+                    authHolder.userId = data.userId;
+                    authHolder.accountId = data.accountId;
+                    
+                    resolve(data);
+                }
+                else {
+                    reject(err);
+                }
+            }
+        }
+
+        if (canUseDOM) {
+            request
+                .post(getUrl(path))
+                .send(params)
+                .accept('application/json')
+                .withCredentials()
+                .end(authResult);
+        }
+        else {
+            request
+                .post(getUrl(path))
+                .send(params)
+                .accept('application/json')
+                .end(authResult);
+        }
     })
 };
 

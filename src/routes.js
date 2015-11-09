@@ -28,20 +28,20 @@ const router = new Router(on => {
 
     //главная страница
     on('/', async (state) => {
-        //var data = await pageDataClient.getPageData(state.context, apiUrls.FeedContent);
-        var data = null;
+        var data = await pageDataClient.getPageData(state.context, apiUrls.FeedContent);
+        //var data = null;
         return <MainPage data={data}/>
     });
 
     //story/081e2b2aff070000/moment/092c2fb8d0070000
     on('/story/:storyId/moment/:momentId', async (state) => {
-        //var storyId = state.params.storyId;
-        //var momentId = state.params.momentId;
-        //var url = apiUrls.MomentContent;
-        //url = url.replace('{storyId}', storyId);
-        //url = url.replace('{momentId}', momentId);
-        //var data = await pageDataClient.getPageData(state.context, url);
-        var data = null;
+        var storyId = state.params.storyId;
+        var momentId = state.params.momentId;
+        var url = apiUrls.MomentContent;
+        url = url.replace('{storyId}', storyId);
+        url = url.replace('{momentId}', momentId);
+        var data = await pageDataClient.getPageData(state.context, url);
+        //var data = null;
         return <MomentPage routeParams={state.params} data={data}/>
     });
 
