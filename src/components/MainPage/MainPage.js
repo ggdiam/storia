@@ -28,9 +28,9 @@ class MainPage extends Component {
             filteredData = this.filterData(data, filterType);
         }
 
-        if (canUseDOM) {
-            console.log('MainPage ctor', data, filteredData, filterType);
-        }
+        //if (canUseDOM) {
+        //    console.log('MainPage ctor', data, filteredData, filterType);
+        //}
 
         //начальное состояние
         this.state = {
@@ -41,19 +41,9 @@ class MainPage extends Component {
     }
 
     componentDidMount() {
-        //console.log('navigator.onLine', navigator.onLine);
-        //
         var data = this.state.data;
 
-        if (data) {
-        //    //фильтруем данные
-        //    var filteredData = this.filterData(data, this.state.filterType);
-        //    //записываем в стейт
-        //    this.setState({
-        //        filteredData: filteredData
-        //    })
-        }
-        else {
+        if (!data) {
             //получаем данные
             this.getFeedContent();
         }

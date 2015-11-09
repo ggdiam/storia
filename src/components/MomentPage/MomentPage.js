@@ -20,9 +20,9 @@ class MomentPage extends Component {
 
         var data = props && props.data ? props.data : null;
 
-        if (canUseDOM) {
-            console.log('MomentPage ctor', data);
-        }
+        //if (canUseDOM) {
+        //    console.log('MomentPage ctor', data);
+        //}
 
         //начальное состояние
         this.state = {

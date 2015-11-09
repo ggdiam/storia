@@ -29,7 +29,7 @@ const DelayedLikeClient = {
                 try {
                     var obj = JSON.parse(sessionStorage[key]);
                     if (obj) {
-                        //пробуем проставить лайк
+                        //пробуем проставить лайк / unlike
                         dataClient.like(obj.storyId, obj.momentId, obj.setLike)
                             .then((data) => {
                                 //лайк прошел успешно - то удаляем ключ
