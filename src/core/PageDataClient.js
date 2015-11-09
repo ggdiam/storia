@@ -43,6 +43,26 @@ var PageDataClient = (function () {
                     //возвращаем
                     resolve(data);
                 }).catch(reject);
+
+                ////на стороне сервера - всегда отдаем контент из API
+                //if (!canUseDOM) {
+                //    //делаем запрос в api
+                //    dataClient.get(url).then((data)=> {
+                //        if (!canUseDOM && context && context.onSetInitialState) {
+                //            context.onSetInitialState(JSON.stringify({
+                //                url: url,
+                //                data: data
+                //            }));
+                //        }
+                //        //возвращаем
+                //        resolve(data);
+                //    }).catch(reject);
+                //}
+                //else {
+                //    //на клиенте, если нет window.__INITIAL_STATE__ - то отдаем null
+                //    //чтобы данные запрашивались в компоненте
+                //    resolve(null);
+                //}
             }
         });
     }

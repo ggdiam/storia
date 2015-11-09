@@ -4,16 +4,53 @@ import config from '../config';
 
 //Клиент работы с данными
 
-//Тут зашита логика авторизации при вызове любого get метода API
+//Тут зашита логика авторизации при вызове любого get, post, del метода API
 //Логика простая: если get запрос вернул 401 - то выполняем авторизацию
 //и повторяем запрос к API
 
 const DataClient = {
     //get запрос к API
-    get: (path, params) => new Promise((resolve, reject) => {
+    get: (path, params) => {
+        return makeRequest('GET', path, params);
+    },
+
+    //Проставление / удаление лайка
+    like: (storyId, momentId, setLike) => new Promise((resolve, reject) => {
+        var url = setLike ? apiUrls.Like : apiUrls.UnLike;
+        url = url.replace('{storyId}', storyId);
+        url = url.replace('{momentId}', momentId);
+        if (setLike) {
+            console.log('DataClient like');
+            //запрос проставление лайка
+            makeRequest('POST', url).then(resolve, reject);
+        }
+        else {
+            console.log('DataClient unlike');
+            //запрос удаления лайка
+            makeRequest('DEL', url).then(resolve, reject);
+        }
+    })
+};
+
+//get запрос к API
+function makeRequest(verb, path, params) {
+    function req(verb, path, params) {
+        verb = verb.toUpperCase();
+        switch (verb) {
+            case 'GET': return api.get(path, params);
+            case 'POST': return api.post(path, params);
+            case 'DEL': return api.del(path, params);
+        }
+
+        //default
+        return api.get(path, params);
+    }
+
+    //логика авторизации при неудачном запросе
+    return new Promise((resolve, reject) => {
         console.log('DataClient get');
         //запрос данных в API
-        api.get(path, params).then((data) => {
+        req(verb, path, params).then((data) => {
             console.log('DataClient success');
             //данные ок - возвращаем
             resolve(data);
@@ -25,7 +62,7 @@ const DataClient = {
                 api.auth(apiUrls.Auth, config.auth.params).then(() => {
                     console.log('DataClient auth success');
                     //авторизовались успешно - снова запрос данных
-                    api.get(path, params).then((data) => {
+                    req(verb, path, params).then((data) => {
                         console.log('DataClient success');
                         //данные ок - возвращаем данные
                         resolve(data);
@@ -46,24 +83,7 @@ const DataClient = {
                 reject(err);
             }
         })
-    }),
-
-    //Проставление лайка похоже работает без авторизации
-    like: (storyId, momentId, setLike) => new Promise((resolve, reject) => {
-        var url = setLike ? apiUrls.Like : apiUrls.UnLike;
-        url = url.replace('{storyId}', storyId);
-        url = url.replace('{momentId}', momentId);
-        if (setLike) {
-            console.log('DataClient like');
-            //запрос проставление лайка
-            api.post(url).then(resolve, reject);
-        }
-        else {
-            console.log('DataClient unlike');
-            //запрос удаления лайка
-            api.del(url).then(resolve, reject);
-        }
     })
-};
+}
 
 export default DataClient;

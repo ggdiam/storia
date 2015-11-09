@@ -104,7 +104,7 @@ const ApiClient = {
                     authHolder.sessionId = data.sessionId;
                     authHolder.userId = data.userId;
                     authHolder.accountId = data.accountId;
-                    
+
                     resolve(data);
                 }
                 else {
