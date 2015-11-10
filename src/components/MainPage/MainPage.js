@@ -115,7 +115,7 @@ import FilterType from '../../constants/FilterType';
     getFeedContent() {
         //получаем ленту
         cachedDataClient.get(apiUrls.FeedContent).then((data) => {
-            console.log(data);
+            //console.log(data);
 
             //ToDo: debug
             //data.items[1].objectPreview.attachments = [

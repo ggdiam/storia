@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Router from 'react-routing/src/Router';
-import http from './core/HttpClient';
 import App from './components/App';
 import NotFoundPage from './components/NotFoundPage';
 import ErrorPage from './components/ErrorPage';

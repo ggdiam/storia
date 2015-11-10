@@ -8,6 +8,11 @@ import delayedLikeClient from './DelayedLikeClient';
 const pingUrl = 'https://storia.me';
 
 //сервис - проверяет доступность сети
+//Логика работы:
+//проверка вызывается после любого неудачного обращения к API
+//каждые 3 сек делается запрос на ping url
+//как только получили успешный ответ - прекращаем пинг
+//запускаем проверку для отложенных лайков
 var IsOnlineService = (function () {
     var inProgress = false;
 

@@ -33,17 +33,17 @@ var DelayedLikeClient = (function () {
 
     function checkDelayedAndSet () {
         new Promise((resolve, reject) => {
-            var i = sessionStorage.length;
 
-            while (i--) {
-                var key = sessionStorage.key(i);
-                console.log('DelayedLikeClient enum keys:', key);
-            }
+            //var i = sessionStorage.length;
+            //while (i--) {
+            //    var key = sessionStorage.key(i);
+            //    console.log('DelayedLikeClient enum keys:', key);
+            //}
 
             //массив промисов для ожидания окончания всех запросов к api
             var waitList = [];
 
-            i = sessionStorage.length;
+            var i = sessionStorage.length;
             //пробегаемся по всем ключам отложенных лайков
             while (i--) {
                 var key = sessionStorage.key(i);

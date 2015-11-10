@@ -44,7 +44,7 @@ const ApiClient = {
                 .end(getResult);
         }
         else {
-            console.log('api get, authHolder', authHolder);
+            console.log(`api get, userId:${authHolder.userId}, SSID:${authHolder.sessionId}`);
             //серверные запросы
             request
                 .get(getUrl(path))
