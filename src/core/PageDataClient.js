@@ -6,6 +6,10 @@ import cachedDataClient from './CachedDataClient';
 //import delayedLikeClient from './DelayedLikeClient';
 
 //клиент для запроса данных страниц
+//Логика работы:
+//если в окружении браузера - потаемся получить данные из __INITIAL_STATE__ (пришли с сервера при серверном рендеринге)
+//если получили - сохраняем в кэш и отдаем
+//если не получили - то пытаемся запросить из API
 var PageDataClient = (function () {
     function getPageData(context, url) {
         return new Promise((resolve, reject)=> {

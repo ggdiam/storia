@@ -16,6 +16,7 @@ import pageDataClient from './core/PageDataClient';
 import MainPage from './components/MainPage';
 import MomentPage from './components/MomentPage';
 
+//Клиентский и серверный роутинг приложения
 const router = new Router(on => {
     on('*', async (state, next) => {
         const component = await next();
@@ -25,6 +26,8 @@ const router = new Router(on => {
     //главная страница
     on('/', async (state) => {
         var data = null;
+
+        //потаемся получить данные для страницы
         try {
             data = await pageDataClient.getPageData(state.context, apiUrls.FeedContent);
             if (canUseDOM) console.log('route /', data);
@@ -33,17 +36,22 @@ const router = new Router(on => {
             console.log('route / err', err);
         }
 
+        //отдаем данные в главную страницу
         return <MainPage data={data}/>
     });
 
     //story/081e2b2aff070000/moment/092c2fb8d0070000
     on('/story/:storyId/moment/:momentId', async (state) => {
+        var data = null;
+
+        //формируем урл для API
         var storyId = state.params.storyId;
         var momentId = state.params.momentId;
         var url = apiUrls.MomentContent;
         url = url.replace('{storyId}', storyId);
         url = url.replace('{momentId}', momentId);
-        var data = null;
+
+        //пытаемся получить данные для страницы момента
         try {
             data = await pageDataClient.getPageData(state.context, url);
             if (canUseDOM) console.log('route /story', data);
@@ -51,6 +59,8 @@ const router = new Router(on => {
         catch (err) {
             console.log('route /story err', err);
         }
+
+        //отдаем данные
         return <MomentPage routeParams={state.params} data={data}/>
     });
 

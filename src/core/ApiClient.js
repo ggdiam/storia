@@ -18,8 +18,9 @@ const getUrl = (path) => {
 };
 
 //Клиент для запросов в API
+//Немного разный вид запросов данных для клиента и сервера
+//на сервере нужно явно передавать SSID, иначе будет 401 - не авторизован
 const ApiClient = {
-
     get: (path, params) => new Promise((resolve, reject) => {
         function getResult(err, res) {
             if (err) {
