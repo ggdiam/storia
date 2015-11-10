@@ -169,7 +169,7 @@ class MomentItem extends Component {
 
                     {this.renderContent(item, ix)}
 
-                    <LikeCtrl data={item} />
+                    <LikeCtrl data={item} reloadData={this.props.reloadData} />
                 </div>
             )
         }

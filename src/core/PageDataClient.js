@@ -1,10 +1,12 @@
 import { canUseDOM } from 'fbjs/lib/ExecutionEnvironment';
 import api from './ApiClient';
 import dataClient from './DataClient';
+import cachedDataClient from './CachedDataClient';
+
+//import delayedLikeClient from './DelayedLikeClient';
 
 //клиент для запроса данных страниц
 var PageDataClient = (function () {
-
     function getPageData(context, url) {
         return new Promise((resolve, reject)=> {
 
@@ -36,7 +38,7 @@ var PageDataClient = (function () {
             }
             else {
                 //делаем запрос в api
-                dataClient.get(url).then((data)=> {
+                cachedDataClient.get(url).then((data)=> {
                     if (!canUseDOM && context && context.onSetInitialState) {
                         context.onSetInitialState(JSON.stringify({
                             url: url,

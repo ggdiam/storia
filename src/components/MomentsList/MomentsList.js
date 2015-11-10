@@ -14,7 +14,7 @@ class MomentsList extends Component {
 
     renderItem(item, ix) {
         return (
-            <MomentItem key={ix} data={item.objectPreview} ix={ix} />
+            <MomentItem key={ix} data={item.objectPreview} ix={ix} reloadData={this.props.reloadData} />
         )
     }
 

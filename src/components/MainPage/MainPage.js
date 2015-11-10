@@ -9,12 +9,12 @@ import dataClient from '../../core/DataClient';
 import cachedDataClient from '../../core/CachedDataClient';
 import apiUrls from '../../constants/ApiUrls';
 import localStorageHelper from '../../core/LocalStorageHelper';
+import delayedLikeClient from '../../core/DelayedLikeClient';
 
 import MomentsList from '../MomentsList';
 import FilterType from '../../constants/FilterType';
 
-@withStyles(styles)
-class MainPage extends Component {
+@withStyles(styles) class MainPage extends Component {
 
     constructor(props) {
         super(props);
@@ -37,7 +37,17 @@ class MainPage extends Component {
             data: data,
             filteredData: filteredData,
             filterType: filterType
-        }
+        };
+
+        //колбек на перезагрузку данных
+        //не очень красиво, пока не придумал куда перенести
+        delayedLikeClient.setReloadDataCallback(this.reloadData.bind(this));
+    }
+
+    //нужно перезагрузить данные после лайка / unlike, чтобы синхронизировать состояние
+    reloadData() {
+        console.log('MainPage data reload');
+        this.getFeedContent();
     }
 
     componentDidMount() {
@@ -86,13 +96,13 @@ class MainPage extends Component {
 
         if (filterType == FilterType.WithPictures) {
             //фильтруем с каритнками
-            filteredData.items = items.filter((item, ix)=>{
+            filteredData.items = items.filter((item, ix)=> {
                 return item.objectPreview.attachments.length > 0;
             });
         }
         else if (filterType == FilterType.WithOutPictures) {
             //фильтруем без каритнок
-            filteredData.items = items.filter((item, ix)=>{
+            filteredData.items = items.filter((item, ix)=> {
                 return item.objectPreview.attachments.length == 0;
             });
         }
@@ -143,13 +153,13 @@ class MainPage extends Component {
                             <span className="glyphicon glyphicon-asterisk"></span>
                         </button>
                         <button title="Моменты с картинками" type="button"
-                            onClick={(e)=>this.setFilter(FilterType.WithPictures)}
-                            className={filterType == FilterType.WithPictures ? activeClassName : defaultClassName}>
+                                onClick={(e)=>this.setFilter(FilterType.WithPictures)}
+                                className={filterType == FilterType.WithPictures ? activeClassName : defaultClassName}>
                             <span className="glyphicon glyphicon-picture"></span>
                         </button>
                         <button title="Моменты без картинок" type="button"
-                            onClick={(e)=>this.setFilter(FilterType.WithOutPictures)}
-                            className={filterType == FilterType.WithOutPictures ? activeClassName : defaultClassName}>
+                                onClick={(e)=>this.setFilter(FilterType.WithOutPictures)}
+                                className={filterType == FilterType.WithOutPictures ? activeClassName : defaultClassName}>
                             <span className="glyphicon glyphicon-th-list"></span>
                         </button>
                     </div>
@@ -168,14 +178,29 @@ class MainPage extends Component {
             console.log('render', filterType, 'data items length', data.items.length);
         }
 
-        return (
-            <div className="MainPage">
-                <div className="container">
-                    { this.renderFilter() }
-                    <MomentsList data={data} />
+        if (data) {
+            return (
+                <div className="MainPage">
+                    <div className="container">
+                        { this.renderFilter() }
+                        <MomentsList data={data} reloadData={this.reloadData.bind(this)}/>
+                    </div>
                 </div>
-            </div>
-        );
+            );
+        }
+        else {
+            return (
+                <div className="MainPage">
+                    <div className="container">
+                        <br />
+                        <br />
+                        Loading...
+                        <br />
+                        <br />
+                    </div>
+                </div>
+            )
+        }
     }
 
 }

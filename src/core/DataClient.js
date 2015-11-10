@@ -2,6 +2,8 @@ import api from './ApiClient';
 import apiUrls from '../constants/ApiUrls';
 import config from '../config';
 
+import { canUseDOM } from 'fbjs/lib/ExecutionEnvironment';
+
 import IsOnlineService from './IsOnlineService';
 
 //Клиент работы с данными
@@ -50,7 +52,7 @@ function makeRequest(verb, path, params) {
 
     //логика авторизации при неудачном запросе
     return new Promise((resolve, reject) => {
-        console.log('DataClient get');
+        console.log('DataClient', verb, path, params ? JSON.stringify(params) : '');
         //запрос данных в API
         req(verb, path, params).then((data) => {
             console.log('DataClient success');
@@ -83,7 +85,9 @@ function makeRequest(verb, path, params) {
                 console.log('DataClient data err');
 
                 //предполагаем - проблемы с сетью - запускаем проверку соединения
-                IsOnlineService.check();
+                if (canUseDOM) {
+                    IsOnlineService.check();
+                }
 
                 //ошибка запроса данных - возвращаем ошибку
                 reject(err);

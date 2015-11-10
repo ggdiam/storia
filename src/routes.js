@@ -24,8 +24,15 @@ const router = new Router(on => {
 
     //главная страница
     on('/', async (state) => {
-        var data = await pageDataClient.getPageData(state.context, apiUrls.FeedContent);
-        //var data = null;
+        var data = null;
+        try {
+            data = await pageDataClient.getPageData(state.context, apiUrls.FeedContent);
+            if (canUseDOM) console.log('route /', data);
+        }
+        catch (err) {
+            console.log('route / err', err);
+        }
+
         return <MainPage data={data}/>
     });
 
@@ -36,8 +43,14 @@ const router = new Router(on => {
         var url = apiUrls.MomentContent;
         url = url.replace('{storyId}', storyId);
         url = url.replace('{momentId}', momentId);
-        var data = await pageDataClient.getPageData(state.context, url);
-        //var data = null;
+        var data = null;
+        try {
+            data = await pageDataClient.getPageData(state.context, url);
+            if (canUseDOM) console.log('route /story', data);
+        }
+        catch (err) {
+            console.log('route /story err', err);
+        }
         return <MomentPage routeParams={state.params} data={data}/>
     });
 

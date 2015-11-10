@@ -7,32 +7,35 @@ import SessionStorageHelper from './SessionStorageHelper.js';
 import IsOnlineService from './IsOnlineService';
 
 //Клиент для запроса данных из API с кэшированием в SessionStorage
+//Логика работы:
+//делается запрос к API
+//если оттуда получили ошибку - отдаем из кэша
+//если нет и в кэше - то возвращаем ошибку
 const CachedDataClient = {
     get: (path, params) => new Promise((resolve, reject) => {
         console.log('CachedDataClient get');
-
         //окружение браузера
         if (canUseDOM) {
-            //var isOnline = window.navigator.onLine;
-            var isOnline = IsOnlineService.isOnline();
-
             var key = getKey(path, params);
-            //получаем значение из кэша
-            var res = SessionStorageHelper.getItem(key);
-            //если офлайн режим и есть в кэше - отдаем
-            if (!isOnline && res) {
-                console.log('CachedDataClient result from cache');
-                resolve(JSON.parse(res));
-            }
-            else {
-                //если нет - то отдаем из API
-                dataClient.get(path, params).then((data) => {
-                    console.log('CachedDataClient result from api');
-                    //результат сохраняем в кэш
-                    SessionStorageHelper.setItem(key, JSON.stringify(data));
-                    resolve(data);
-                }, reject);
-            }
+
+            dataClient.get(path, params).then((data) => {
+                console.log('CachedDataClient result from api');
+                //результат сохраняем в кэш
+                SessionStorageHelper.setItem(key, JSON.stringify(data));
+                resolve(data);
+            }).catch((err) => {
+                //если из API получить не удалось - отдаем из кэша
+                //получаем значение из кэша
+                var res = SessionStorageHelper.getItem(key);
+                if (res) {
+                    console.log('CachedDataClient result from cache');
+                    resolve(JSON.parse(res));
+                }
+                else {
+                    //иначе - отдаем ошибку
+                    reject(err);
+                }
+            });
         }
         else {
             dataClient.get(path, params).then(resolve, reject);

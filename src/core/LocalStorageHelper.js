@@ -26,11 +26,12 @@ var LocalStorageHelper = (function () {
 
     function clearAll() {
         console.log('localStorage clearAll');
-        var i = localStorage.length;
-        while(i--) {
-            var key = localStorage.key(i);
-            localStorage.removeItem(key);
-        }
+        localStorage.clear();
+        //var i = localStorage.length;
+        //while(i--) {
+        //    var key = localStorage.key(i);
+        //    localStorage.removeItem(key);
+        //}
     }
 
     return {

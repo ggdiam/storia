@@ -26,7 +26,7 @@ class Html extends Component {
         var scriptInitState = `window.__INITIAL_STATE__ = '${state}';`;
 
         return (
-            <html className="no-js" lang="">
+            <html className="no-js" lang="" >
             <head>
                 <meta charSet="utf-8"/>
                 <meta httpEquiv="X-UA-Compatible" content="IE=edge"/>

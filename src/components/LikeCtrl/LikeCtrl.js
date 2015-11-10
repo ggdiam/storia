@@ -39,6 +39,11 @@ class LikeCtrl extends Component {
                 else {
                     console.log('set like success');
                 }
+
+                //перезагружаем данные
+                if (this.props.reloadData) {
+                    this.props.reloadData();
+                }
             }).catch((err) => {
                 if (isLiked) {
                     console.log('set unlike fails');

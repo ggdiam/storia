@@ -8,6 +8,7 @@ import { canUseDOM } from 'fbjs/lib/ExecutionEnvironment';
 import dataClient from '../../core/DataClient';
 import cachedDataClient from '../../core/CachedDataClient';
 import apiUrls from '../../constants/ApiUrls';
+import delayedLikeClient from '../../core/DelayedLikeClient';
 
 import MomentItem from '../MomentItem';
 import MomentViewType from '../../constants/MomentViewType';
@@ -27,16 +28,26 @@ class MomentPage extends Component {
         //начальное состояние
         this.state = {
             data: data
-        }
+        };
+
+        //колбек на перезагрузку данных
+        //не очень красиво, пока не придумал куда перенести
+        delayedLikeClient.setReloadDataCallback(this.reloadData.bind(this));
+    }
+
+    //нужно перезагрузить данные после лайка / unlike, чтобы синхронизировать состояние
+    reloadData() {
+        console.log('MomentPage data reload');
+        this.getMomentContent();
     }
 
     componentDidMount() {
-        var data = this.state.data;
-
-        if (!data) {
-            //получаем данные
-            this.getMomentContent();
-        }
+        //var data = this.state.data;
+        //
+        //if (!data) {
+        //    //получаем данные
+        //    this.getMomentContent();
+        //}
     }
 
     //получает данные момента
@@ -66,13 +77,28 @@ class MomentPage extends Component {
     render() {
         var data = this.state && this.state.data ? this.state.data.moment : null;
 
-        return (
-            <div className="MomentPage">
-                <div className="container">
-                    <MomentItem viewType={MomentViewType.details} data={data} />
+        if (data) {
+            return (
+                <div className="MomentPage">
+                    <div className="container">
+                        <MomentItem viewType={MomentViewType.details} data={data}/>
+                    </div>
                 </div>
-            </div>
-        );
+            );
+        }
+        else {
+            return (
+                <div className="MomentPage">
+                    <div className="container">
+                        <br />
+                        <br />
+                        Loading...
+                        <br />
+                        <br />
+                    </div>
+                </div>
+            );
+        }
     }
 
 }

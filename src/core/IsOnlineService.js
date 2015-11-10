@@ -9,16 +9,17 @@ const pingUrl = 'https://storia.me';
 
 //сервис - проверяет доступность сети
 var IsOnlineService = (function () {
+    var inProgress = false;
+
     var isOnline = true;
 
     //запускает проверку
     function check() {
-        console.log('IsOnline check');
-        setTimeout(checkResult, 3000);
+        setTimeout(runCheck, 3000);
     }
 
-    //обработка результата пинга
-    function checkResult() {
+    //пинг
+    function runCheck() {
         //пингуем
         ping().then((res) => {
             //если успешно - есть коннект - прекращаем пинговать
@@ -27,6 +28,8 @@ var IsOnlineService = (function () {
 
             //запускаем проверку отложенных лайков
             delayedLikeClient.checkDelayedAndSet();
+
+            inProgress = false;
         }).catch((res) => {
             //если не достучались - то нет коннекта - пингуем снова через 3 сек
             isOnline = false;
@@ -45,6 +48,7 @@ var IsOnlineService = (function () {
             var ms = new Date().getTime();
             var reqUrl = pingUrl + `?rnd=${ms}_${random}`;
 
+            console.log('IsOnline ping request', reqUrl);
             request
                 .get(reqUrl)
                 .end((err, res) => {
@@ -60,7 +64,12 @@ var IsOnlineService = (function () {
     }
 
     return {
-        check: check,
+        check: function () {
+            if (!inProgress) {
+                inProgress = true;
+                check();
+            }
+        },
         isOnline: function () {
             return isOnline
         },
