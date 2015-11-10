@@ -285,8 +285,6 @@ import FilterType from '../../constants/FilterType';
                             : null
                         }
 
-                        <button onClick={this.reloadData.bind(this)} className="btn btn-default">Reload data</button>
-
                     </div>
                 </div>
             );
