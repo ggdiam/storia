@@ -1,6 +1,7 @@
 .MainPage {
     background-color: #f2f2f2;
     /*font-size: 30px;*/
+    padding-bottom: 20px;
 }
 
 .MainPage .container {

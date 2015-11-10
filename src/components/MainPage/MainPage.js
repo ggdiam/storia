@@ -19,11 +19,15 @@ import FilterType from '../../constants/FilterType';
     constructor(props) {
         super(props);
 
+        this.loadMoreInProgress = false;
+        this.loadedPages = 0;
+
         var filteredData = null;
         var data = props && props.data ? props.data : null;
         var filterType = this.loadFilterState();
 
         if (data) {
+            this.loadedPages = 1;
             //фильтруем данные
             filteredData = this.filterData(data, filterType);
         }
@@ -46,8 +50,95 @@ import FilterType from '../../constants/FilterType';
 
     //нужно перезагрузить данные после лайка / unlike, чтобы синхронизировать состояние
     reloadData() {
-        console.log('MainPage data reload');
-        this.getFeedContent();
+        console.log('MainPage data reloading...');
+
+        if (this.loadedPages <= 1) {
+            this.getFeedContent();
+        }
+        else {
+            var maxPages = this.loadedPages;
+            var curPage = 0;
+
+            function res(data) {
+                curPage += 1;
+
+                if (curPage < maxPages) {
+                    console.log('loadNextPage data loaded, curPage', curPage, 'loading more...');
+                    this.loadNextPage(data).then(res.bind(this));
+                }
+                else {
+                    //фильтруем данные
+                    var filteredData = this.filterData(data, this.state.filterType);
+                    //записываем в стейт
+                    this.setState({
+                        data: data,
+                        filteredData: filteredData
+                    });
+
+                    console.log('loadNextPage data loaded, curPage', curPage, 'reload finished');
+                }
+            }
+
+            this.loadNextPage(null, null, true).then(res.bind(this))
+        }
+    }
+
+    //загружает данные следующей страницы
+    loadNextPage(currentData, minId, first) {
+        return new Promise((resolve, reject) => {
+            var url = '';
+            if (first) {
+                url = apiUrls.FeedContent;
+            }
+            else {
+                var min = minId ? minId : currentData.minId;
+                url = `${apiUrls.FeedContent}?limit=20&until=${currentData.minId}`;
+            }
+
+            //получаем ленту
+            cachedDataClient.get(url).then((data) => {
+
+                if (currentData) {
+                    //мерджим данные item'ов с уже имеющимися
+                    data.items = currentData.items.concat(data.items);
+                }
+                currentData = data;
+
+                //обновляем кэш
+                cachedDataClient.saveDataForRequest(apiUrls.FeedContent, null, currentData);
+
+                resolve(currentData);
+            }).catch((err) => {
+                console.error('loadNextPage err', err);
+                reject(err);
+            })
+        })
+    }
+
+    //загрузить следующие страницы
+    loadMore() {
+        console.log('loadMore click');
+
+        if (this.state.data && !this.loadMoreInProgress) {
+            this.loadMoreInProgress = true;
+
+            this.loadNextPage(this.state.data).then((data) => {
+                this.loadedPages += 1;
+                console.log('loadMore, loadedPages', this.loadedPages);
+
+                //фильтруем данные
+                var filteredData = this.filterData(data, this.state.filterType);
+                //записываем в стейт
+                this.setState({
+                    data: data,
+                    filteredData: filteredData
+                });
+
+                this.loadMoreInProgress = false;
+            }).catch((err) => {
+                console.log('load more err', err);
+            })
+        }
     }
 
     componentDidMount() {
@@ -179,11 +270,23 @@ import FilterType from '../../constants/FilterType';
         }
 
         if (data) {
+            //флаг загрузки еще
+            var loadMoreAvailable = data.moreAvailable;
+
             return (
                 <div className="MainPage">
                     <div className="container">
                         { this.renderFilter() }
                         <MomentsList data={data} reloadData={this.reloadData.bind(this)}/>
+
+                        {
+                            loadMoreAvailable ?
+                                <button onClick={this.loadMore.bind(this)} className="btn btn-default">Load More</button>
+                            : null
+                        }
+
+                        <button onClick={this.reloadData.bind(this)} className="btn btn-default">Reload data</button>
+
                     </div>
                 </div>
             );
