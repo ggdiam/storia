@@ -41,6 +41,12 @@ const CachedDataClient = {
             dataClient.get(path, params).then(resolve, reject);
         }
     }),
+    saveDataForRequest: (path, params, data) => {
+        if (canUseDOM) {
+            var key = getKey(path, params);
+            SessionStorageHelper.setItem(key, JSON.stringify(data));
+        }
+    }
 };
 
 //получает ключ из пути и параметорв

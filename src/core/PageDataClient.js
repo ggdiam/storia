@@ -25,6 +25,9 @@ var PageDataClient = (function () {
                     if (url == stateData.url) {
                         data = stateData.data;
 
+                        //также сохраним данные в кэш
+                        cachedDataClient.saveDataForRequest(url, null, data);
+
                         //обнуляем, чтобы дальнейшие запросы были в API
                         window.__INITIAL_STATE__ = null;
                     }
