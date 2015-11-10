@@ -1,24 +1,10 @@
 ## Тестовое задание для соискателя в отдел Web разработки компании Frumatic
 
-[![Support us on Bountysource](https://dl.dropboxusercontent.com/u/16006521/react-starter-kit/banner.png)](https://salt.bountysource.com/teams/react-starter-kit)<br>
 
-> [React Starter Kit](http://www.reactstarterkit.com) is an opinionated
-> boilerplate for web development built on top of Facebook's
-> [React](https://facebook.github.io/react/) library,
-> [Node.js](https://nodejs.org/) / [Express](http://expressjs.com/) server
-> and [Flux](http://facebook.github.io/flux/) architecture. Containing
-> modern web development tools such as [Webpack](http://webpack.github.io/),
-> [Babel](http://babeljs.io/) and [BrowserSync](http://www.browsersync.io/).
-> Helping you to stay productive following the best practices. A solid starting
-> point for both professionals and newcomers to the industry.
+
+### Демо версия
 
 Собранная версия на моем сервере: http://diam-linux.cloudapp.net:5005/
-
-### Documentation
-
-  * **General**
-    - [React Style Guide](./docs/react-style-guide.md)
-    - [How to configure text editors and IDEs](./docs/how-to-configure-text-editors.md)
 
 
 ### Основные файлы с логикой тут
