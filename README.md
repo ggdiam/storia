@@ -1,6 +1,8 @@
 ## Тестовое задание для соискателя в отдел Web разработки компании Frumatic
 
+### Само задание
 
+https://github.com/ggdiam/storia/blob/master/WebTestTask.pdf
 
 ### Демо версия
 
